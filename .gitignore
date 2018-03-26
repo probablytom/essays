@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+
+# Latex
+*.aux
+*.log
+*.gz
+*.out
+*.toc
+auto/
+
+# LatexMK output
+*.fls
+*.fdb_latexmk
+
+# Bibtex output
+*.bbl
+*.blg
+
+# Releases
+*.pdf
+*.epub
