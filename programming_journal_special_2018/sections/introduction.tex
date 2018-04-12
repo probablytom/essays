@@ -1,31 +1,125 @@
 \section{Introduction}
 
-\subsection{What's A Model?}
-To understand a part of the world, we have to analyse it --- this can be done in
-two ways. The first is to observe the world directly, making predictions to
-verify a representation of what's known. The second is to take what's known, and
-what others' predictions have shown to be true, and compose them together into a
-trustworthy representation of what's known. Either way, we come to build a
-representation of the world, and \emph{this} is our ``model''. \par
+% Make more contextual reference to the dojo being some sort of holy retreat, as
+% if it's some sort of religion for programmers a-la thecodelesscode.
 
-Systems modelling is an old field. There's an argument to be made that cave
-paintings or rudimentary philosophical arguments constitute a model of a system
---- but this isn't helpful. Really, a model of a system is something we employ
-to learn about the world, not \emph{just} to represent it. So, we're not \emph{just}
-looking for a representation of the world: we're looking for a representation
-which can be inspected to reveal something about its subject.\par
+\footnotesize{\emph{In a mountain retreat for programmers, a student visits
+    hoping to gain wisdom about how to avoid critical systems failing at
+    essential moments.}}
 
-This review of literature in the field will cover a historical account of the
-field, and examine a few of the different methods developed for building these
-representations of the world, but comes to the conclusion that modern
-developments simply aren't pragmatic for performing systems modelling in the
-real world, due to difficulties in some key areas of modelling a system:
+\student Teacher, the world is strange, and trying to produce reliable software
+in it can be quite difficult. I can't imagine how people make sense of
+complicated events that overturn our meticulous engineering! I've heard of flash
+crashes on stock markets, of unreliable voting systems, and of medical systems
+failing to provide vital care to those who need it. What wisdom do you have for
+avoiding these mistakes, when we build important systems in an unpredictable world?
 
-\begin{itemize}
-\item Information capture
-\item System analysis
-\item Exploration of result
-\end{itemize}
+\teacher It's not useful to answer your question before we know the nature of
+the world. To develop software without knowing its environment is to buy a chair
+without seeing its house: if it fulfils its function, it will do so
+ill-fittingly.
+\noindent The world is built on a series of complicated systems, interacting and
+influencing each other. In early times, eager students of many fields set aside
+their differences to build the General Systems Theory, a method of modelling the
+world's many facets with a common method for all students\ldots{}~but it was not
+enough.
+\noindent General Systems Theory placed a focus on how the world related
+together, framing all things as either entities or relations between them. For a
+time, this was enough, but the early theorists developed their framework with
+little regard for a system's \emph{behaviour}: how their structures might change
+through time. Many solutions were suggested: Cybernetics, Cellular Automata, and
+many new system theories. Arguably, the most successful was Chaos Theory, but
+---
+
+\student --- but we have had chaos theory for decades! Is even the most
+successful theory of systems --- including their behaviours --- still not
+enough?
+
+\teacher We have to be patient. The third act takes place now, in research into
+\emph{Complex Adaptive Systems}. These systems change both their structure and
+their behaviour in response to a range of inputs, allowing the model to evolve
+in profound ways that we still struggle to understand. To date, these Complex
+Adaptive Systems remain elusive to study, due to their highly dynamic nature, as
+well as the difficulties in capturing all of the relevant information in a model
+so as to accurately simulate your ``unpredictable world''.
+\noindent If we can properly simulate a complex adaptive system, we can better
+understand the environment of your vital systems, and perhaps better prepare for
+catastrophic events; or better yet, adapt our systems so as to mitigate these
+events by reacting and responding to them.
+
+\student If these system models are so powerful, why don't we already use them
+to investigate the world?!
+
+\teacher That's because as our models grow larger, they become intractibly
+difficult to build accurately; a model of a CAS must capture all of a system's
+state, behaviour, \emph{and} the variance present in each as the system responds
+to its environment. To build these models at scale is a challenge we are still
+solving.
+
+\student Perhaps I can help: in a recent sprint a lead developer insisted that
+our team begin employing Aspect Oriented Programming. Aspect Orientation allowed
+us to separate some orthoganal concerns of our code, such as debugging and
+logging, from the core business logic. Along similar lines, if we can construct
+models of non-adaptive systems at scale, and apply the variation separately to
+the simulation of the problem domain itself, then the core simulation doesn't
+have to deal with a CAS' additional detail; it can appear as a regular
+simulation, and variation to agents' behaviour could be applied separately.
+
+\teacher Aspect orientation appears little in the simulation of agent behaviour.
+This avenue hasn't been explored much yet; perhaps it can offer a way forward in
+building practical models of complicated systems.
+
+\student That's not all! Using aspects for these orthoganal concerns to the
+actual problem domain, experiments and alternative simulations could be carried
+out not by editing an unwieldy and complex model, but by swapping one set of
+aspects for another. Then, experiments and analyses on a problem can be
+represented by a small implementation of the problem domain, and a library of
+aspects which compose the system itself.
+
+\teacher Can you be certain that such a method can really capture the myriad
+dimensions of a complex adaptive system? Can such a method be as accurate as a
+hand-crafted simulation with adaptation hardcoded into the problem domain?
+
+\student If aspect orientation really does appear little in system modelling
+literature, then the only way to know is to try. I will return once I have
+conducted a Research Project, and will present my meditations on my findings.
+
+\indent \emph{The teacher nods, turns, and returns to their patient study, a
+  signal to their student; the enthusiastic new recruit parts ways and exits the
+  dojo, making a mental note to prepare the rites of the Literature Review.}
+
+
+
+
+% \subsection{What's A Model?}
+% To understand a part of the world, we have to analyse it --- this can be done in
+% two ways. The first is to observe the world directly, making predictions to
+% verify a representation of what's known. The second is to take what's known, and
+% what others' predictions have shown to be true, and compose them together into a
+% trustworthy representation of what's known. Either way, we come to build a
+% representation of the world, and \emph{this} is our ``model''. \par
+
+% Systems modelling is an old field. There's an argument to be made that cave
+% paintings or rudimentary philosophical arguments constitute a model of a system
+% --- but this isn't helpful. Really, a model of a system is something we employ
+% to learn about the world, not \emph{just} to represent it. So, we're not \emph{just}
+% looking for a representation of the world: we're looking for a representation
+% which can be inspected to reveal something about its subject.\par
+
+% This review of literature in the field will cover a historical account of the
+% field, and examine a few of the different methods developed for building these
+% representations of the world, but comes to the conclusion that modern
+% developments simply aren't pragmatic for performing systems modelling in the
+% real world, due to difficulties in some key areas of modelling a system:
+
+% \begin{itemize}
+% \item Information capture
+% \item System analysis
+% \item Exploration of result
+% \end{itemize}
+
+% Ultimately, a question is raised by the literatue as it currently stands. Is
+% there necessarily a tradeoff involved between these 
 
 % \subsection{Competing Paradigms}
 % What different ways of constructing these models have emerged?
