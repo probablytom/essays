@@ -63,97 +63,52 @@ representation from TGP\cite{koza1994genetic}.
 \todo{Flesh out with more of our method. Make the paper more about showing off
   what we've got, rather than justifying that it's like what other people do.}
 Altering source code can be done in a variety of ways, depending on a process'
-representation. In \cite{wallis2018a}, a general purpose technique for altering
-code prior to execution is demonstrated for the purposes of injecting
-``mistakes'' into a model of software development workflows.\par
+representation. In PyDySoFu\cite{pydysofu}, a general purpose technique for altering
+code prior to execution is implemented.\par
 
-The technique works by catching function calls prior to execution. The AST of
-the original function is captured, modified using an arbitrary alteration
-function, and the result run instead of the original. Every time the target
-function is run, then, a slightly altered variant is run in its place. In
-\cite{wallis2018a}, this is used to represent ``mistakes'' in a workflow
-simulation of software engineers.\par
-
-Conceivably, these behaviours could be considered ``improvements'' on the
-original workflow design, depending on the perspective. Some changes might make
-the workflow more resilient against the mistakes of other agents. What
-constitutes an improvement, rather than a mistake, is dependent on some sort of
-metric of ``goodness'' --- a clear analogy to fitness functions used in GP can be
-seen.\par
+PyDySoFu works by catching function calls prior to execution. The AST of the
+original function is retrieved, modified using an arbitrary alteration function
+--- a ``process fuzzer'', or ``fuzzer'' --- and the result run instead of the
+original. Every time the target function is run, a slightly altered
+variant is executed in its place. In \cite{wallis2018a}, this is used to represent
+``mistakes'' in a workflow simulation of software engineers.\par
 
 \subsection{Genetic Programming using Dynamic Fuzzing}
-three improvements on the design of the process fuzzing in \cite{wallis2018a}
-permit the implementation of GP in the process fuzzing library
-PyDySoFu\cite{pydysofu}: first, process fuzzers (``fuzzers'') can now generate
-and keep track of multiple variants of a function and their results, and second,
-fuzzers can improve on those variants by comparing their results against success
-metrics. A third addition --- the recombination of ASTs to generate new
-offspring --- provides GP-style interactions via process fuzzing.\par
+Three improvements on the design of process fuzzing as used in
+\cite{wallis2018a} permit the implementation of GP in PyDySoFu: recording a
+generation, or ``round'', of variants with their outputs; the ability to
+generate a new round of variants via comparison to some fitness function, or
+``success metric''; and the recombination of variants' ASTs in generating a new
+round.\par
 
 \subsection{Incremental Improvers}
-
 Implementing the first two of these features is the \texttt{IncrementalImprover}
-fuzzing aspect class found in the repository at \cite{pydysofu} (example
-ommitted for space reasons). This fuzzer allows the provision of success metrics
-for fuzzing targets, using different lengths of rounds and different numbers of
-variants per round for improved search. \par
+fuzzer found in the repository at \cite{pydysofu}. This fuzzer allows rounds of
+variants to be generated, their outputs recorded, and new rounds constructed by
+the ranking of the previous one against a success metric --- fulfilling the
+first two of the earlier requirements.\par
 
 Importantly, the fuzzer can be adapted simply by constructing a subclass which
-overrides methods representing behaviour to be changed. This allows improvements
-and small tweaks to the ordinary behaviour of a fuzzer to be implemented simply.
-For example, one modular component of the \texttt{IncrementalImprover} is how it
-ranks variants. To rank in descending order against a success metric (analogous
-to GP's fitness functions) where success is considered to be far away from
-``\texttt{0}'':
-
-\begin{figure}
-  \centering
-  \begin{lstlisting}
-  from pydysofu import IncrementalImprover
-
-  class SortkeyOverridingImprover(IncrementalImprover):
-      def sort_key(self, result):
-          '''
-          :param result: a tuple of the form:
-          (variant, mean of variant's success metric values)
-          :return: a value used to rank this pair
-          '''
-          actual_result = result[1]
-          return -abs(actual_result) #-ve for descending order
-  \end{lstlisting}
-  \caption{Overriding a sort key for ranking variants}
-  \label{fig:sort_key_override}
-\end{figure}
-\todo{Decide whether to keep this in, add more code snippets, or remove them altogether}
-
-% The architecture of PyDySoFu is structured so that changes to fuzzers can be
-% implemented as minor implementation details, by separating the concerns of
-% an approach or application of the technology to a given problem domain into
-% methods which can be overwritten. This minimises the amount of code required for
-% tailoring the use of PyDySoFu to a given problem domain.
-
-The architectural decision to modularise different components of a fuzzer's
-behaviour allows for extension of a fuzzer's behaviour and improvements on its
-ordinary capabilities with minimal additional work. This facilitates the
-implementation of new techniques while utilising the capacities of existing
-fuzzers.\par
+overrides methods representing behaviour to be changed. The architectural
+decision to modularise different components of a fuzzer's behaviour allows for
+improvements on its ordinary capabilities with minimal additional work. This
+facilitates the implementation of new techniques while utilising the capacities
+of existing fuzzers.\par
 
 \subsection{Genetic Improvers}
 
-The approach has been extended to allow a GP style approach by fuzzing ASTs, a
-technique already proven in Java\cite{castle2012evolving,cody2015locogp}. This
-is done by extending the \texttt{IncrementalImprover} into a
-\texttt{GeneticImprover} by updating its construction of a new ``round'' of
-variants, so as to allow the splicing of ASTs with a \texttt{splice} method on
-the fuzzer.\todo{update ``splice'' here to be an inline listings thing?} This
-can be overwritten in much the same way as the sort key is in
-\cref{fig:sort_key_override}.
+Using this extensibility, recombination of previous variants in the construction
+of a new round is implemented by the introduction of a \texttt{splice} method
+(and its integration into the construction of new rounds). This can be
+overwritten by improved future fuzzers by taking advantage of this same
+extensibility.\par
 
-By way of showing that the interactions required of GP can be found in this
-method, an implementation of a symbolic regression using standard functions
-found in \cite{koza1994genetic} can be found in
-\cite{pydysofu} as a unit test. An implementation of the Santa Fe Ant problem is
-also underway.
+This allows the interactions expected for a GP style approach tot he mutation of
+ASTs, a technique already proven in some Java implementations of genetic
+metaprogramming\cite{castle2012evolving,cody2015locogp}. By way of showing that
+GP-style interactions \emph{are} represented in this way, a symbolic regression
+using standard functions from seminal GP literature\cite{koza1994genetic} can be
+found as test cases in the PyDySoFu source\cite{pydysofu}.\par
 
 \subsection{Benefits of the Approach}
 Use of PyDySoFu as a GP solution has a number of advantages. First, it is under
