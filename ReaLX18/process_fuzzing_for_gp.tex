@@ -21,16 +21,13 @@
 Genetic Programming (GP) is a very well-established and promising field which
 has returned impressive results in a number of areas. The field has spawned a
 number of similar approaches which, while based on the same underlying concept,
-approach an evolution-based solution in novel ways.\par
-
-Cartesian GP\cite{miller1999empirical,miller2011cartesian} uses a directed
-graph, rather than a tree, to represent a solution to a problem, and has seen
-great success, particularly for its ability to converge on an acceptable
-solution in a relatively short number of generations. Stack-based
-GP\cite{perkis1994stack} is a method which employs the use of stacks so as to
-push/pop values of different types. This has the advantage of being able to work
-with state, which can be difficult for the traditional tree-based genetic
-programming (TGP) approach.\par
+approach an evolution-based solution in novel ways. Cartesian
+GP\cite{miller2011cartesian} uses a directed graph to
+represent a solution to a problem, and has seen great success, for its ability
+to converge on an acceptable solution in a relatively short number of
+generations. Stack-based GP\cite{perkis1994stack} employs the use of stacks so
+as to work with state and keep track of multiple values, which can be difficult
+for the traditional tree-based genetic programming (TGP) approach.\par
 
 \subsection{Genetic Metaprogramming}
 Not all variants of GP present methods for improving mathematical-looking
@@ -49,11 +46,11 @@ operations, to achieve a solution.\par
 Indeed, approaches involving the alteration of source code have garnered a
 growing amount of attention: in the improvement of Java programs alone, several
 tools for the improvement of a codebase have
-arisen\cite{cody2015locogp,arcuri2008multi,orlov2011flight,castle2012evolving}.
-As well as improving codebases, genetic metaprogramming could be used to
-implement standard problems in GP such as symbolic regression, by constructing
-imperative processes that fit a curve, rather than the traditional tree
-representation from TGP\cite{koza1994genetic}.
+arisen\cite{cody2015locogp,arcuri2008multi,castle2012evolving}. As well as
+improving codebases, genetic metaprogramming could be used to implement standard
+problems in GP such as symbolic regression, by constructing imperative processes
+that fit a curve, rather than the traditional tree representation from
+TGP\cite{koza1994genetic}.
 \par
 
 
@@ -119,14 +116,10 @@ fuzzing can be used to separate concerns in a variety of fields\par
 Importantly, PyDySoFu just a tool for implementing solutions to GP problems. Its
 versatility is a second benefit: its most active area of study, socio-technical
 variance, provides a plethora of problem domains where GP might find
-applications. Research involving the construction of a model of a problem domain
-comes with an additional associated time cost; as libraries of case studies are
-developed and verified for sociotechnical variance research which fit a
-PyDySoFu-esque modelling technique, applications of genetic programming
-naturally arise. this is explored further is \cref{sec:future_work}.\par
+applications. This is explored further in \cref{sec:future_work}.\par
 
-Further, PyDySoFu is able to fuzz code \emph{dynamically}, by which we mean that variants
-of a function can be generated \emph{every time that function is called}. As GP
+Further, PyDySoFu is able to fuzz code \emph{as it is run}.\footnote{We refer to
+this as ``dynamic fuzzing''.} As GP
 techniques are increasingly used to improve codebases, this functionality can be
 used to perform experiments with GP solutions which might --- for example ---
 use dynamic fuzzing to represent solutions which operate in an unreliable real
