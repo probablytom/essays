@@ -11,8 +11,8 @@
   of writing and improving computer programs. Generally, for experiments in this
   area, bespoke tools are constructed to perform research. In this paper, it is
   demonstrated that GP behaviour can be achieved via \emph{process fuzzing}, and
-  describes an implementation of the adaptation of ASTs for GP behaviour in the
-  process fuzzing tool PyDySoFu.
+  an implementation of the adaptation of ASTs for GP behaviour in the
+  process fuzzing tool PyDySoFu is described.
 \end{abstract}
 
 
@@ -20,11 +20,11 @@
 Genetic Programming (GP) is a very well-established and promising field which
 has returned impressive results in a number of areas. The field has spawned a
 number of similar approaches which, while based on the same underlying concept,
-approach an evolution-based solution in novel ways. Cartesian
+attempt an evolution-based solution in novel ways. Cartesian
 GP\cite{miller2011cartesian} uses a directed graph to
 represent a solution to a problem, and has seen great success, for its ability
 to converge on an acceptable solution in a relatively short number of
-generations. Stack-based GP\cite{perkis1994stack} employs the use of stacks so
+generations. Stack-based GP\cite{perkis1994stack} employs the use of multiple different stacks so
 as to work with state and keep track of multiple values, which can be difficult
 for the traditional tree-based genetic programming (TGP) approach.\par
 
@@ -35,10 +35,9 @@ which, rather than mutating some abstract representation of a program, mutate
 the program itself. \footnote{As no term for this specific category of GP
   approaches seems to have been coined, they will be referred to here as
   ``genetic metaprogramming''.} Stack-based GP in the Push family of
-languages\cite{spector2001autoconstructive}, for example, feature an approach
+languages\cite{spector2001autoconstructive}, for example, features an approach
 where values on stacks can be code, which can be subsequently executed; in this
-way, Stack-based GP can be used to achieve a kind of metaprogramming with a
-genetic approach. Similarly, Linear Genetic Programming\cite{brameier2007linear}
+way, Stack-based GP can be used to achieve a kind of metaprogramming. Similarly, Linear Genetic Programming\cite{brameier2007linear}
 (LGP) is a method which evolves a series of instructions, rather than a tree of
 operations, to achieve a solution.\par
 
@@ -46,15 +45,44 @@ Indeed, approaches involving the alteration of source code have garnered a
 growing amount of attention: in the improvement of Java programs alone, several
 tools for the improvement of a codebase have
 arisen\cite{cody2015locogp,arcuri2008multi,castle2012evolving}. As well as
-improving codebases, genetic metaprogramming could be used to implement standard
-problems in GP such as symbolic regression, by constructing \emph{imperative}
+improving codebases, genetic metaprogramming could be used to implement solutions to problems in GP, by constructing imperative
 processes that fit a curve, rather than a functional-style tree representation
 as in TGP\cite{koza1994genetic}.\par
 
 
-\section{Approaches with Dynamic Fuzzing}
 
-In order to explore an implementation of GP-style behaviour in PyDySoFu, it is
+\section{Approaches with Process Fuzzing}
+
+\subsection{A Brief Note on Process Fuzzing}
+
+Ultimately, Genetic Programming relies on the mutation and evaluation of a representation of a problem's solution. Process fuzzing allows for this to be achieved for imperative code, by modifying and rewriting it prior to execution. A tool implementing this is PyDySoFu\cite{pydysofu}. PyDySoFu catches function calls and --- every time a function is executed --- modifies the function's AST and runs the resulting code, rather than the original. This modification is performed by passing the AST through a particular function, called a ``process fuzzer'' (or ``fuzzer'').\par
+
+There is a clear link between the requirement for mutation in GP and the functionality provided by a fuzzer. However, while this mutation is possible through PyDySoFu's existing functionality, the evaluation of a variant required in GP is not. Three things are required for this improvement:
+
+\begin{enumerate}
+\item Multiple variants must be generated and their outputs tracked, so they can be compared to each other, and ranked.
+\item This ranking must be done by some function appropriate for the problem domain at hand --- GP's ``fitness functions''.
+\item Once variants are ranked, it must be possible to recombine successful ones and use these in future generations.
+\end{enumerate}
+
+Improving PyDySoFu is therefore necessary to exploit the similarities between mutation and process fuzzing.\footnote{Improvements to PyDySoFu were not originally developed with GP specifically in mind. Therefore, generations are referred to as ``rounds'', and fitness functions as ``success metrics''.}
+
+
+\subsection{Improving PyDySoFu}
+PyDySoFu was originally unable to keep track of multiple variants, nor record the return values of the variants it produced. This was a the result of the design of PyDySoFu's mechanism for generating variants. A solution to this naturally presented itself, however: PyDySoFu had been designed from the beginning to function in an aspect-oriented fashion, where the application of a fuzzer was advice given to a weak aspect-orientation framework. The solution was therefore to extend PyDySoFu's underlying mechanism into a more fully featured aspect orientation framework, capable of more sophisticated code weaving.
+
+% TODO: DESCRIBE ASP
+
+\subsection{Implementing GP-Like Behaviour}
+
+
+
+\subsection{Benefits of the Approach}
+
+
+\section{Approaches with Dynamic Fuzzing OLD SECTION}
+
+In\todo{DELETE THIS SECTION FOR REWRITTEN VERSION ABOVE} order to explore an implementation of GP-style behaviour in PyDySoFu, it is
 important to first understand how the tool works.\par
 
 
