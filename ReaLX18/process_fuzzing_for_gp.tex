@@ -7,13 +7,12 @@
 \maketitle
 
 \begin{abstract}
-  Genetic Programming has a variety of benefits over other learning paradigms
-  for the purposes of explainability and versitility. Recently, a growing
-  application area has been the genetic writing and improvement of computer
-  programs. This paper demonstrates that this goal can be achieved through
-  application of the genetic programming paradigm using a novel technique,
-  called \emph{process fuzzing}, and presents an implementation of this in
-  PyDySoFu.
+  Genetic Programming (GP) has recently seen a growing application in the area
+  of writing and improving computer programs. Generally, for experiments in this
+  area, bespoke tools are constructed to perform research. In this paper, it is
+  demonstrated that GP behaviour can be achieved via \emph{process fuzzing}, and
+  describes an implementation of the adaptation of ASTs for GP behaviour in the
+  process fuzzing tool PyDySoFu.
 \end{abstract}
 
 
@@ -30,8 +29,8 @@ as to work with state and keep track of multiple values, which can be difficult
 for the traditional tree-based genetic programming (TGP) approach.\par
 
 \subsection{Genetic Metaprogramming}
-Not all variants of GP present methods for improving mathematical-looking
-functions to fit some goal function, however. Variants have begun to arise
+Generally, variants of GP present methods for improving mathematical-looking
+functions against some fitness function. However, variants have begun to arise
 which, rather than mutating some abstract representation of a program, mutate
 the program itself. \footnote{As no term for this specific category of GP
   approaches seems to have been coined, they will be referred to here as
@@ -48,13 +47,26 @@ growing amount of attention: in the improvement of Java programs alone, several
 tools for the improvement of a codebase have
 arisen\cite{cody2015locogp,arcuri2008multi,castle2012evolving}. As well as
 improving codebases, genetic metaprogramming could be used to implement standard
-problems in GP such as symbolic regression, by constructing imperative processes
-that fit a curve, rather than the traditional tree representation from
-TGP\cite{koza1994genetic}.
-\par
+problems in GP such as symbolic regression, by constructing \emph{imperative}
+processes that fit a curve, rather than a functional-style tree representation
+as in TGP\cite{koza1994genetic}.\par
 
 
 \section{Approaches with Dynamic Fuzzing}
+
+In order to explore an implementation of GP-style behaviour in PyDySoFu, it is
+important to first understand how the tool works.\par
+
+
+% ==========
+% Consider refactoring this! A good subsec structure could be:
+% - Process Fuzzing
+% - PyDySoFu
+% - Implementing GP (IncrementalImprover, GeneticImprover)
+% - Benefits
+% ==========
+
+
 \label{sec:dynamic_fuzzing}
 \subsection{The Technology}
 \todo{Flesh out with more of our method. Make the paper more about showing off
