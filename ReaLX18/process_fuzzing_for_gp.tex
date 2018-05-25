@@ -1,4 +1,4 @@
-\documentclass[draft,12pt]{llncs}   % TODO: change this to Springer format
+\documentclass[draft,12pt]{llncs} % TODO: change this to Springer format
 
 \include{prelude}
 
@@ -11,193 +11,156 @@
   of writing and improving computer programs. Generally, for experiments in this
   area, bespoke tools are constructed to perform research. In this paper, it is
   demonstrated that GP behaviour can be achieved via \emph{process fuzzing}, and
-  an implementation of the adaptation of ASTs for GP behaviour in the
-  process fuzzing tool PyDySoFu is described.
+  an implementation of the adaptation of ASTs for GP behaviour in the process
+  fuzzing tool PyDySoFu is described.
 \end{abstract}
 
 
-\section{Evolving Programs}
-Genetic Programming (GP) is a very well-established and promising field which
-has returned impressive results in a number of areas. The field has spawned a
-number of similar approaches which, while based on the same underlying concept,
-attempt an evolution-based solution in novel ways. Cartesian
-GP\cite{miller2011cartesian} uses a directed graph to
-represent a solution to a problem, and has seen great success, for its ability
-to converge on an acceptable solution in a relatively short number of
-generations. Stack-based GP\cite{perkis1994stack} employs the use of multiple different stacks so
-as to work with state and keep track of multiple values, which can be difficult
-for the traditional tree-based genetic programming (TGP) approach.\par
+\section{Evolving Programs} Genetic Programming (GP) is a very well-established
+and promising field which has returned impressive results in a number of areas.
+The field has spawned a number of similar approaches which, while based on the
+same underlying concept, attempt an evolution-based solution in novel ways.
+Cartesian GP\cite{miller2011cartesian} uses a directed graph to represent a
+solution to a problem, and has seen great success, for its ability to converge
+on an acceptable solution in a relatively short number of generations.
+Stack-based GP\cite{perkis1994stack} employs the use of multiple different
+stacks so as to work with state and keep track of multiple values, which can be
+difficult for the traditional tree-based genetic programming (TGP) approach.\par
 
-\subsection{Genetic Metaprogramming}
-Generally, variants of GP present methods for improving mathematical-looking
-functions against some fitness function. However, variants have begun to arise
-which, rather than mutating some abstract representation of a program, mutate
-the program itself. \footnote{As no term for this specific category of GP
+\subsection{Genetic Metaprogramming} Generally, variants of GP present methods
+for improving mathematical-looking functions against some fitness function.
+However, variants have begun to arise which, rather than mutating some abstract
+representation of a program, mutate the program itself. \footnote{As no term for
+this specific category of GP
   approaches seems to have been coined, they will be referred to here as
   ``genetic metaprogramming''.} Stack-based GP in the Push family of
 languages\cite{spector2001autoconstructive}, for example, features an approach
 where values on stacks can be code, which can be subsequently executed; in this
-way, Stack-based GP can be used to achieve a kind of metaprogramming. Similarly, Linear Genetic Programming\cite{brameier2007linear}
-(LGP) is a method which evolves a series of instructions, rather than a tree of
-operations, to achieve a solution.\par
+way, Stack-based GP can be used to achieve a kind of metaprogramming. Similarly,
+Linear Genetic Programming\cite{brameier2007linear} (LGP) is a method which
+evolves a series of instructions, rather than a tree of operations, to achieve a
+solution.\par
 
 Indeed, approaches involving the alteration of source code have garnered a
 growing amount of attention: in the improvement of Java programs alone, several
 tools for the improvement of a codebase have
 arisen\cite{cody2015locogp,arcuri2008multi,castle2012evolving}. As well as
-improving codebases, genetic metaprogramming could be used to implement solutions to problems in GP, by constructing imperative
-processes that fit a curve, rather than a functional-style tree representation
-as in TGP\cite{koza1994genetic}.\par
+improving codebases, genetic metaprogramming could be used to implement
+solutions to problems in GP, by constructing imperative processes that fit a
+curve, rather than a functional-style tree representation as in
+TGP\cite{koza1994genetic}.\par
 
 
 
 \section{Approaches with Process Fuzzing}
 
 \subsection{A Brief Note on Process Fuzzing}
+Ultimately, Genetic Programming relies on the mutation and evaluation of a
+representation of a problem's solution. Process fuzzing allows for this to be
+achieved for imperative code, by modifying and rewriting it prior to execution.
+A tool implementing this is PyDySoFu\cite{pydysofu}. PyDySoFu catches function
+calls and --- every time a function is executed --- modifies the function's AST
+and runs the resulting code, rather than the original. This modification is
+performed by passing the AST through a particular function, called a ``process
+fuzzer'' (or ``fuzzer'').\par
 
-Ultimately, Genetic Programming relies on the mutation and evaluation of a representation of a problem's solution. Process fuzzing allows for this to be achieved for imperative code, by modifying and rewriting it prior to execution. A tool implementing this is PyDySoFu\cite{pydysofu}. PyDySoFu catches function calls and --- every time a function is executed --- modifies the function's AST and runs the resulting code, rather than the original. This modification is performed by passing the AST through a particular function, called a ``process fuzzer'' (or ``fuzzer'').\par
-
-There is a clear link between the requirement for mutation in GP and the functionality provided by a fuzzer. However, while this mutation is possible through PyDySoFu's existing functionality, the evaluation of a variant required in GP is not. Three things are required for this improvement:
+There is a clear link between the requirement for mutation in GP and the
+functionality provided by a fuzzer. Some work is required, however, to represent
+GP-like interactions within the tool. Specifically:
 
 \begin{enumerate}
-\item Multiple variants must be generated and their outputs tracked, so they can be compared to each other, and ranked.
-\item This ranking must be done by some function appropriate for the problem domain at hand --- GP's ``fitness functions''.
-\item Once variants are ranked, it must be possible to recombine successful ones and use these in future generations.
+\item Multiple variants must be generated and their outputs tracked, so they can
+be compared to each other, and ranked.
+\item This ranking must be done by some function appropriate for the problem
+domain at hand --- GP's ``fitness functions''.
+\item Once variants are ranked, it must be possible to recombine successful ones
+and use these in future generations.
 \end{enumerate}
 
-Improving PyDySoFu is therefore necessary to exploit the similarities between mutation and process fuzzing.\footnote{Improvements to PyDySoFu were not originally developed with GP specifically in mind. Therefore, generations are referred to as ``rounds'', and fitness functions as ``success metrics''.}
 
 
 \subsection{Improving PyDySoFu}
-PyDySoFu was originally unable to keep track of multiple variants, nor record the return values of the variants it produced. This was a the result of the design of PyDySoFu's mechanism for generating variants. A solution to this naturally presented itself, however: PyDySoFu had been designed from the beginning to function in an aspect-oriented fashion, where the application of a fuzzer was advice given to a weak aspect-orientation framework. The solution was therefore to extend PyDySoFu's underlying mechanism into a more fully featured aspect orientation framework, capable of more sophisticated code weaving.
+PyDySoFu was originally unable to keep track of multiple variants, nor record
+the return values of the variants it produced. The solution was to extend
+PyDySoFu's underlying mechanism into a more fully featured aspect orientation
+framework, capable of more sophisticated code weaving.\par
 
-% TODO: DESCRIBE ASP
+This extension became an aspect orientation framework, ASP\cite{asp}. ASP's
+pertinent feature is its abilty to weave advice around a method of a class, such
+that functions can be executed before and after the method is called, without
+being coupled to the original codebase.\par 
 
 \subsection{Implementing GP-Like Behaviour}
+Critically, aspects in ASP can be objects. When fuzzers are written as instances
+of aspect classes, they can use instance variables to keep track of the variants
+they generate between invocations. Also, because ASP is capable not only of
+including behaviour before method invocation, but also after, PyDySoFu can
+utilise this to catch the output from the method call, and use this to rank
+variants. This satisfies the first of the three earlier criteria.\par
 
+When instances of fuzzers are created, a success metric\footnote{Improvements to
+  PyDySoFu were not originally developed with GP specifically in mind.
+  Therefore, generations are referred to as ``rounds'', and fitness functions as
+  ``success metrics''.} can be passed to its constructor, and this is
+kept within the object's state --- this can then be used in the ranking of
+variants in a round, fulfilling the second of the above criteria.\par
 
-
-\subsection{Benefits of the Approach}
-
-
-\section{Approaches with Dynamic Fuzzing OLD SECTION}
-
-In\todo{DELETE THIS SECTION FOR REWRITTEN VERSION ABOVE} order to explore an implementation of GP-style behaviour in PyDySoFu, it is
-important to first understand how the tool works.\par
-
-
-% ==========
-% Consider refactoring this! A good subsec structure could be:
-% - Process Fuzzing
-% - PyDySoFu
-% - Implementing GP (IncrementalImprover, GeneticImprover)
-% - Benefits
-% ==========
-
-
-\label{sec:dynamic_fuzzing}
-\subsection{The Technology}
-\todo{Flesh out with more of our method. Make the paper more about showing off
-  what we've got, rather than justifying that it's like what other people do.}
-Altering source code can be done in a variety of ways, depending on a process'
-representation. In PyDySoFu\cite{pydysofu}, a general purpose technique for altering
-code prior to execution is implemented.\par
-
-PyDySoFu works by catching function calls prior to execution. The AST of the
-original function is retrieved, modified using an arbitrary alteration function
---- a ``process fuzzer'', or ``fuzzer'' --- and the result run instead of the
-original. Every time the target function is run, a slightly altered
-variant is executed in its place. In \cite{wallis2018a}, this is used to represent
-``mistakes'' in a workflow simulation of software engineers.\par
-
-\subsection{Genetic Programming using Dynamic Fuzzing}
-Three improvements on the design of process fuzzing as used in
-\cite{wallis2018a} permit the implementation of GP in PyDySoFu: recording a
-generation, or ``round'', of variants with their outputs; the ability to
-generate a new round of variants via comparison to some fitness function, or
-``success metric''; and the recombination of variants' ASTs in generating a new
-round.\par
-
-\subsection{Incremental Improvers}
-Implementing the first two of these features is the \texttt{IncrementalImprover}
-fuzzer found in the repository at \cite{pydysofu}. This fuzzer allows rounds of
-variants to be generated, their outputs recorded, and new rounds constructed by
-the ranking of the previous one against a success metric --- fulfilling the
-first two of the earlier requirements.\par
-
-Importantly, the fuzzer can be adapted simply by constructing a subclass which
-overrides methods representing behaviour to be changed. The architectural
-decision to modularise different components of a fuzzer's behaviour allows for
-improvements on its ordinary capabilities with minimal additional work. This
-facilitates the implementation of new techniques while utilising the capacities
-of existing fuzzers.\par
-
-\subsection{Genetic Improvers}
-
-Using this extensibility, recombination of previous variants in the construction
-of a new round is implemented by the introduction of a \texttt{splice} method
-(and its integration into the construction of new rounds). This can be
-overwritten by improved future fuzzers by taking advantage of this same
-extensibility.\par
-
-This allows the interactions expected for a GP style approach tot he mutation of
-ASTs, a technique already proven in some Java implementations of genetic
-metaprogramming\cite{castle2012evolving,cody2015locogp}. By way of showing that
-GP-style interactions \emph{are} represented in this way, a symbolic regression
-using standard functions from seminal GP literature\cite{koza1994genetic} can be
-found as test cases in the PyDySoFu source\cite{pydysofu}.\par
+Recombination of variants can be done by combining modified ASTs from variants
+in the previous round when constructing a new one --- this fulfils the third of
+the above criteria, and is implemented in such a way as to make recombination
+easily tailored to individual problem domains via subclasses. Source for the
+\texttt{GeneticImprover} implementation of these improvements can be found in
+the project's repository\cite{pydysofu}.\par
 
 \subsection{Benefits of the Approach}
 Use of PyDySoFu as a GP solution has a number of advantages. First, it is under
 active development, meaning that the tool can be expected to improve. Users can
 anticipate PyDySoFu to be a fertile ground for new research, where process
-fuzzing can be used to separate concerns in a variety of fields\par
+fuzzing can be used to separate concerns in a variety of fields.\par
 
-Importantly, PyDySoFu just a tool for implementing solutions to GP problems. Its
-versatility is a second benefit: its most active area of study, socio-technical
-variance, provides a plethora of problem domains where GP might find
-applications. This is explored further in \cref{sec:future_work}.\par
+Importantly, PyDySoFu is not just a tool for implementing solutions to GP
+problems. Its versatility is a second benefit: its most active area of study,
+socio-technical variance, provides a plethora of problem domains where GP might
+find applications. Performing this research without a cross-disciplinary tool
+would require lots of ancillary work.\par
 
 Further, PyDySoFu is able to fuzz code \emph{as it is run}.\footnote{We refer to
-this as ``dynamic fuzzing''.} As GP
-techniques are increasingly used to improve codebases, this functionality can be
-used to perform experiments with GP solutions which might --- for example ---
-use dynamic fuzzing to represent solutions which operate in an unreliable real
-world, such as an unreliable network or anomalies in animal populations.\par
+  this as ``dynamic fuzzing''.} This functionality can be used to perform
+experiments with GP solutions which might --- for example --- use dynamic
+fuzzing to represent solutions which operate in an unreliable real world, such
+as an unreliable network or anomalies in animal populations.\par
+
 
 \section{Future Work}
 \label{sec:future_work}
 
 PyDySoFu is a new entrant into tools for running experiments within GP, with the
 unusual trait that its suitability for evaluating GP problems comes from its
-versatility, rather than being developed specifically for the field.\par
-
-A result of this is that PyDySoFu is poised to be an unusually effective tool in
-a variety of fields. Many things can be done to increase PyDySoFu's
-effectiveness as a GP tool, and to exploit PyDySoFu's versitility to explore new
+versatility, meaning that PyDySoFu is positioned to be an unusually effective
+tool in a variety of fields. Many things can be done to increase PyDySoFu's
+effectiveness as a GP tool, and to exploit it's versitility to explore new
 research possibilities, including:
 
 \begin{itemize}
+
 \item A wider array of GP-style fuzzers can be implemented, building on the
   broad array of code improving GP approaches surfacing in the literature.
 
 \item Replication of existing studies in GP would assist the development of more
 GP-style fuzzers, as well as more concretely validating PyDySoFu as a tool for
 GP.
-  
-\item As socio-technical models surface, GP-style improvement of a problem
-  domain is an exciting research opportunity. For example: in a scenario where
-  models of socio-technical variance are developed, GP techniques could be
-  employed to explore ``better'' socio-technical systems which, when exposed to
-  that variance, are more resilient to stress, safer, or more efficient, as well
-  as uncountable other meta-heuristics. This benefits from GP's explainability,
-  as each ``improvement'' of the problem domain (application of a fuzzer) leaves
-  a trace showing how a real-world system might be improved.
 
-\item Further exploration of GP using AST-style improvement for codebase
+\item Further exploration of GP using AST-style program mutation for codebase
   improvement can also be explored in Python using PyDySoFu, which, combined
   with the other research opportunities, makes it an exciting alternative to
   existing solutions.
+
+\item Given PyDySoFu naturally links socio-technical modelling and GP,
+  experiments involving GP solutions to socio-technical problems are now
+  feasible. A major contribution of GP interactions in PyDySoFu is that the
+  tool's versitility allows GP to be explored within socio-technical problem
+  domains\cite{wallis2018a}.
+
 \end{itemize}
 
 
@@ -205,9 +168,9 @@ GP.
 This paper has given a brief overview of recent development of PyDySoFu, a
 process fuzzing tool which is now capable of GP-style interactions. While
 GP-style interactions arising from process fuzzing is an interesting result of
-its own, the availability of the tool is hoped to inspire further work in the
-area, and help to contribute to the growing literature on genetic
-metaprogramming.\par
+its own, the availability of the tool should inspire further genetic
+metaprogramming work, and encourage researchers to make use of its
+potential across a variety of domains.\par
 
 
 \bibliography{lib}
