@@ -124,16 +124,15 @@ socio-technical variance, provides a plethora of problem domains where GP might
 find applications. Performing this research without a cross-disciplinary tool
 would require lots of ancillary work.\par
 
-Further, PyDySoFu is able to fuzz code \emph{as it is run}.\footnote{We refer to
-  this as ``dynamic fuzzing''.} This functionality can be used to perform
-experiments with GP solutions which might --- for example --- use dynamic
-fuzzing to represent solutions which operate in an unreliable real world, such
-as an unreliable network or anomalies in animal populations.\par
+Further, PyDySoFu is able to fuzz code \emph{as it is run} (``dynamic
+fuzzing''). This functionality can be used to perform experiments with GP
+solutions which might --- for example --- use dynamic fuzzing to represent
+solutions which operate in an unreliable real world, such as an unreliable
+network or anomalies in animal populations.\par
 
 
 \section{Future Work}
 \label{sec:future_work}
-
 PyDySoFu is a new entrant into tools for running experiments within GP, with the
 unusual trait that its suitability for evaluating GP problems comes from its
 versatility, meaning that PyDySoFu is positioned to be an unusually effective
@@ -144,12 +143,9 @@ research possibilities, including:
 \begin{itemize}
 
 \item A wider array of GP-style fuzzers can be implemented, building on the
-  broad array of code improving GP approaches surfacing in the literature.
-
-\item Replication of existing studies in GP would assist the development of more
-GP-style fuzzers, as well as more concretely validating PyDySoFu as a tool for
-GP.
-
+  broad array of code-improving GP approaches surfacing in the literature.
+  These could also be used to replicate previous work in the field.
+  
 \item Further exploration of GP using AST-style program mutation for codebase
   improvement can also be explored in Python using PyDySoFu, which, combined
   with the other research opportunities, makes it an exciting alternative to
@@ -171,6 +167,10 @@ GP-style interactions arising from process fuzzing is an interesting result of
 its own, the availability of the tool should inspire further genetic
 metaprogramming work, and encourage researchers to make use of its
 potential across a variety of domains.\par
+
+\section*{Acknowledgements}
+\label{sec:ack}
+The authors would like to thank Obashi Technology for helping to fund this research.
 
 
 \bibliography{lib}
