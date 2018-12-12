@@ -1,3 +1,6 @@
 [submodule "more_than_enough_is_too_much"]
 	path = more_than_enough_is_too_much
 	url = git@github.com:probablytom/more_than_enough_is_too_much.git
+[submodule "workflow_fuzzing_paper"]
+	path = workflow_fuzzing_paper
+	url = git@github.com:probablytom/workflow_fuzzing
