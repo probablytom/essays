@@ -1,0 +1,3 @@
+[submodule "more_than_enough_is_too_much"]
+	path = more_than_enough_is_too_much
+	url = git@github.com:probablytom/more_than_enough_is_too_much.git
