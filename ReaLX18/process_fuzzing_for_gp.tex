@@ -1,4 +1,4 @@
-\documentclass[draft,12pt]{llncs} % TODO: change this to Springer format
+\documentclass[12pt]{llncs} % TODO: change this to Springer format
 
 \include{prelude}
 
@@ -27,13 +27,11 @@ Stack-based GP\cite{perkis1994stack} employs the use of multiple different
 stacks so as to work with state and keep track of multiple values, which can be
 difficult for the traditional tree-based genetic programming (TGP) approach.\par
 
-\subsection{Genetic Metaprogramming} Generally, variants of GP present methods
-for improving mathematical-looking functions against some fitness function.
-However, variants have begun to arise which, rather than mutating some abstract
-representation of a program, mutate the program itself. \footnote{As no term for
-this specific category of GP
-  approaches seems to have been coined, they will be referred to here as
-  ``genetic metaprogramming''.} Stack-based GP in the Push family of
+\subsection{Genetic Improvement}
+Generally, variants of GP present methods for improving mathematical-looking
+functions against some fitness function. However, variants have begun to arise
+which, rather than mutating some abstract representation of a program, mutate
+the program itself. Stack-based GP in the Push family of
 languages\cite{spector2001autoconstructive}, for example, features an approach
 where values on stacks can be code, which can be subsequently executed; in this
 way, Stack-based GP can be used to achieve a kind of metaprogramming. Similarly,
@@ -45,9 +43,9 @@ Indeed, approaches involving the alteration of source code have garnered a
 growing amount of attention: in the improvement of Java programs alone, several
 tools for the improvement of a codebase have
 arisen\cite{cody2015locogp,arcuri2008multi,castle2012evolving}. As well as
-improving codebases, genetic metaprogramming could be used to implement
-solutions to problems in GP, by constructing imperative processes that fit a
-curve, rather than a functional-style tree representation as in
+improving codebases, genetic improvement-style metaprogramming could be used to
+implement solutions to problems in GP, by constructing imperative processes that
+fit a curve, rather than a functional-style tree representation as in
 TGP\cite{koza1994genetic}.\par
 
 
@@ -59,7 +57,9 @@ Ultimately, Genetic Programming relies on the mutation and evaluation of a
 representation of a problem's solution. Process fuzzing allows for this to be
 achieved for imperative code, by modifying and rewriting it prior to execution.
 A tool implementing this is PyDySoFu\cite{pydysofu}. PyDySoFu catches function
-calls and --- every time a function is executed --- modifies the function's AST
+calls and --- every time a function is executed --- modifies the function's
+AST\footnote{An Abstract Syntax Tree is a tree representation of an expression
+  in a language with a formal grammar, such as programming languages.}
 and runs the resulting code, rather than the original. This modification is
 performed by passing the AST through a particular function, called a ``process
 fuzzer'' (or ``fuzzer'').\par
@@ -122,7 +122,7 @@ Importantly, PyDySoFu is not just a tool for implementing solutions to GP
 problems. Its versatility is a second benefit: its most active area of study,
 socio-technical variance, provides a plethora of problem domains where GP might
 find applications. Performing this research without a cross-disciplinary tool
-would require lots of ancillary work.\par
+would require lots of ancillary work, but PyDySoFu bridges this gap.\par
 
 Further, PyDySoFu is able to fuzz code \emph{as it is run} (``dynamic
 fuzzing''). This functionality can be used to perform experiments with GP
@@ -170,7 +170,8 @@ potential across a variety of domains.\par
 
 \section*{Acknowledgements}
 \label{sec:ack}
-The authors would like to thank Obashi Technology for helping to fund this research.
+The authors would like to thank Obashi Technology for helping to fund this
+research, and Rob Dekkers for his help reviewing this work.
 
 
 \bibliography{lib}
