@@ -4,3 +4,6 @@
 [submodule "workflow_fuzzing_paper"]
 	path = workflow_fuzzing_paper
 	url = git@github.com:probablytom/workflow_fuzzing
+[submodule "BPMDS2019"]
+	path = BPMDS2019
+	url = git@github.com:probablytom/BPMDS2019.git
